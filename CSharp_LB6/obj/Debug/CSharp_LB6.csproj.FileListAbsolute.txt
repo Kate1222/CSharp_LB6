@@ -1,0 +1,11 @@
+C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\bin\Debug\CSharp_LB6.exe.config
+C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\bin\Debug\CSharp_LB6.exe
+C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\bin\Debug\CSharp_LB6.pdb
+C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\obj\Debug\CSharp_LB6.csproj.AssemblyReference.cache
+C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\obj\Debug\CSharp_LB6.csproj.SuggestedBindingRedirects.cache
+C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\obj\Debug\CSharp_LB6.Properties.Resources.resources
+C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\obj\Debug\CSharp_LB6.csproj.GenerateResource.cache
+C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\obj\Debug\CSharp_LB6.csproj.CoreCompileInputs.cache
+C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\obj\Debug\CSharp_LB6.exe
+C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\obj\Debug\CSharp_LB6.pdb
+C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\obj\Debug\CSharp_LB6.Form1.resources
