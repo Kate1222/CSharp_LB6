@@ -22,5 +22,10 @@ namespace CSharp_LB6
                 this.Close();
             }
         }
+
+        private void UserNameDialog_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = userName == string.Empty;
+        }
     }
 }

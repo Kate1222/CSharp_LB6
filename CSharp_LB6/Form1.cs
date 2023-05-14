@@ -17,7 +17,7 @@ namespace CSharp_LB6
         private Functions _functions = new Functions();
         public Form1()
         {
-            var userName = _functions.GetUserName();
+            var userName = Functions.GetUserName();
             InitializeComponent();
             comboBoxUsers.Enabled = false;
             buttonSelectUser.Enabled = false;

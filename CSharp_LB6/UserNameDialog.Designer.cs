@@ -77,6 +77,7 @@ namespace CSharp_LB6
             this.MinimumSize = new System.Drawing.Size(570, 190);
             this.Name = "UserNameDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UserNameDialog_FormClosing);
             this.Text = "Ім\'я користувача";
             this.ResumeLayout(false);
             this.PerformLayout();
