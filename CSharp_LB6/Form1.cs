@@ -14,32 +14,21 @@ namespace CSharp_LB6
 {
     public partial class Form1 : Form
     {
+        private Functions _functions = new Functions();
         public Form1()
         {
-            string userName;
+            var userName = _functions.GetUserName();
             InitializeComponent();
             comboBoxUsers.Enabled = false;
             buttonSelectUser.Enabled = false;
-            if (!File.Exists("username.json"))
-            {
-                var userNameDialog = new UserNameDialog();
-                userNameDialog.ShowDialog();
-                userName = userNameDialog.userName;
-                var saveUserNameJsonFile = JsonSerializer.Serialize(userName);
-                File.WriteAllText("username.json", saveUserNameJsonFile);
-            }
-            else
-            {
-                var readUserNameJsonFile = File.ReadAllText("username.json");
-                userName = JsonSerializer.Deserialize<string>(readUserNameJsonFile);
-            }
+            
 
             labelName.Text = "Вітаю, " + userName;
         }
 
         private void buttonAddFile_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            var openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = "c:\\";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
