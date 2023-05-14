@@ -8,7 +8,7 @@ namespace CSharp_LB6
         public string userName = string.Empty;
         public UserNameDialog()
         {
-            this.ControlBox=false;
+            this.ControlBox = false;
             InitializeComponent();
         }
 

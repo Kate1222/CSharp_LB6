@@ -34,25 +34,29 @@
             this.radioButtonOtherFiles = new System.Windows.Forms.RadioButton();
             this.radioButtonClientFiles = new System.Windows.Forms.RadioButton();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FileFormat = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FileWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FilePath = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FileDataCreate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.comboBoxUsers = new System.Windows.Forms.ComboBox();
             this.groupBoxUsers = new System.Windows.Forms.GroupBox();
             this.buttonSelectUser = new System.Windows.Forms.Button();
             this.labelName = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeUserNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FileWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FilePath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FileDataCreate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IsAvailable = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBoxMode.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBoxUsers.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonAddFile
             // 
             this.buttonAddFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAddFile.Location = new System.Drawing.Point(1081, 12);
+            this.buttonAddFile.Location = new System.Drawing.Point(1081, 27);
             this.buttonAddFile.Name = "buttonAddFile";
             this.buttonAddFile.Size = new System.Drawing.Size(91, 56);
             this.buttonAddFile.TabIndex = 0;
@@ -64,7 +68,7 @@
             // 
             this.groupBoxMode.Controls.Add(this.radioButtonOtherFiles);
             this.groupBoxMode.Controls.Add(this.radioButtonClientFiles);
-            this.groupBoxMode.Location = new System.Drawing.Point(37, 21);
+            this.groupBoxMode.Location = new System.Drawing.Point(39, 27);
             this.groupBoxMode.Name = "groupBoxMode";
             this.groupBoxMode.Size = new System.Drawing.Size(229, 100);
             this.groupBoxMode.TabIndex = 1;
@@ -97,11 +101,75 @@
             // 
             this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { this.Number, this.FileName, this.FileFormat, this.FileWeight, this.FilePath, this.FileDataCreate });
-            this.dataGridView1.Location = new System.Drawing.Point(12, 127);
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { this.Number, this.FileName, this.FileWeight, this.FilePath, this.FileDataCreate, this.IsAvailable });
+            this.dataGridView1.Location = new System.Drawing.Point(12, 133);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1160, 622);
+            this.dataGridView1.Size = new System.Drawing.Size(1160, 616);
             this.dataGridView1.TabIndex = 2;
+            // 
+            // comboBoxUsers
+            // 
+            this.comboBoxUsers.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.comboBoxUsers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxUsers.FormattingEnabled = true;
+            this.comboBoxUsers.Location = new System.Drawing.Point(6, 25);
+            this.comboBoxUsers.Name = "comboBoxUsers";
+            this.comboBoxUsers.Size = new System.Drawing.Size(343, 32);
+            this.comboBoxUsers.TabIndex = 3;
+            // 
+            // groupBoxUsers
+            // 
+            this.groupBoxUsers.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.groupBoxUsers.Controls.Add(this.buttonSelectUser);
+            this.groupBoxUsers.Controls.Add(this.comboBoxUsers);
+            this.groupBoxUsers.Location = new System.Drawing.Point(412, 59);
+            this.groupBoxUsers.Name = "groupBoxUsers";
+            this.groupBoxUsers.Size = new System.Drawing.Size(482, 68);
+            this.groupBoxUsers.TabIndex = 2;
+            this.groupBoxUsers.TabStop = false;
+            this.groupBoxUsers.Text = "Users";
+            // 
+            // buttonSelectUser
+            // 
+            this.buttonSelectUser.Location = new System.Drawing.Point(365, 25);
+            this.buttonSelectUser.Name = "buttonSelectUser";
+            this.buttonSelectUser.Size = new System.Drawing.Size(111, 32);
+            this.buttonSelectUser.TabIndex = 4;
+            this.buttonSelectUser.Text = "Обрати";
+            this.buttonSelectUser.UseVisualStyleBackColor = true;
+            this.buttonSelectUser.Click += new System.EventHandler(this.buttonSelectUser_Click);
+            // 
+            // labelName
+            // 
+            this.labelName.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.labelName.Location = new System.Drawing.Point(412, 28);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(482, 26);
+            this.labelName.TabIndex = 3;
+            this.labelName.Text = "Вітаю, ";
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.файлToolStripMenuItem });
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1184, 24);
+            this.menuStrip1.TabIndex = 4;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // файлToolStripMenuItem
+            // 
+            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.changeUserNameToolStripMenuItem });
+            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
+            this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.файлToolStripMenuItem.Text = "Файл";
+            // 
+            // changeUserNameToolStripMenuItem
+            // 
+            this.changeUserNameToolStripMenuItem.Name = "changeUserNameToolStripMenuItem";
+            this.changeUserNameToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.changeUserNameToolStripMenuItem.Text = "Змінити ім\'я";
+            this.changeUserNameToolStripMenuItem.Click += new System.EventHandler(this.changeUserNameToolStripMenuItem_Click);
             // 
             // Number
             // 
@@ -115,13 +183,6 @@
             this.FileName.HeaderText = "Назва файлу";
             this.FileName.Name = "FileName";
             this.FileName.ReadOnly = true;
-            // 
-            // FileFormat
-            // 
-            this.FileFormat.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.FileFormat.HeaderText = "Формат файлу";
-            this.FileFormat.Name = "FileFormat";
-            this.FileFormat.ReadOnly = true;
             // 
             // FileWeight
             // 
@@ -144,46 +205,12 @@
             this.FileDataCreate.Name = "FileDataCreate";
             this.FileDataCreate.ReadOnly = true;
             // 
-            // comboBoxUsers
+            // IsAvailable
             // 
-            this.comboBoxUsers.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.comboBoxUsers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxUsers.FormattingEnabled = true;
-            this.comboBoxUsers.Location = new System.Drawing.Point(6, 25);
-            this.comboBoxUsers.Name = "comboBoxUsers";
-            this.comboBoxUsers.Size = new System.Drawing.Size(343, 32);
-            this.comboBoxUsers.TabIndex = 3;
-            // 
-            // groupBoxUsers
-            // 
-            this.groupBoxUsers.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.groupBoxUsers.Controls.Add(this.buttonSelectUser);
-            this.groupBoxUsers.Controls.Add(this.comboBoxUsers);
-            this.groupBoxUsers.Location = new System.Drawing.Point(412, 53);
-            this.groupBoxUsers.Name = "groupBoxUsers";
-            this.groupBoxUsers.Size = new System.Drawing.Size(482, 68);
-            this.groupBoxUsers.TabIndex = 2;
-            this.groupBoxUsers.TabStop = false;
-            this.groupBoxUsers.Text = "Users";
-            // 
-            // buttonSelectUser
-            // 
-            this.buttonSelectUser.Location = new System.Drawing.Point(365, 25);
-            this.buttonSelectUser.Name = "buttonSelectUser";
-            this.buttonSelectUser.Size = new System.Drawing.Size(111, 32);
-            this.buttonSelectUser.TabIndex = 4;
-            this.buttonSelectUser.Text = "Обрати";
-            this.buttonSelectUser.UseVisualStyleBackColor = true;
-            this.buttonSelectUser.Click += new System.EventHandler(this.buttonSelectUser_Click);
-            // 
-            // labelName
-            // 
-            this.labelName.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.labelName.Location = new System.Drawing.Point(412, 9);
-            this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(482, 26);
-            this.labelName.TabIndex = 3;
-            this.labelName.Text = "Вітаю, ";
+            this.IsAvailable.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.IsAvailable.HeaderText = "Доступний для передачі?";
+            this.IsAvailable.Name = "IsAvailable";
+            this.IsAvailable.ReadOnly = true;
             // 
             // Form1
             // 
@@ -195,7 +222,9 @@
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBoxMode);
             this.Controls.Add(this.buttonAddFile);
+            this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MinimumSize = new System.Drawing.Size(1200, 800);
             this.Name = "Form1";
@@ -204,8 +233,17 @@
             this.groupBoxMode.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBoxUsers.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
         }
+
+        private System.Windows.Forms.DataGridViewTextBoxColumn IsAvailable;
+
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem changeUserNameToolStripMenuItem;
 
         private System.Windows.Forms.Label labelName;
 
@@ -217,7 +255,6 @@
 
         private System.Windows.Forms.DataGridViewTextBoxColumn Number;
         private System.Windows.Forms.DataGridViewTextBoxColumn FileName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FileFormat;
         private System.Windows.Forms.DataGridViewTextBoxColumn FileWeight;
         private System.Windows.Forms.DataGridViewTextBoxColumn FilePath;
         private System.Windows.Forms.DataGridViewTextBoxColumn FileDataCreate;

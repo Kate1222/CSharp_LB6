@@ -15,28 +15,26 @@ namespace CSharp_LB6
     public partial class Form1 : Form
     {
         private Functions _functions = new Functions();
+        private List<UserFile> personalUserFiles;
+
         public Form1()
         {
-            var userName = Functions.GetUserName();
+            var userName = _functions.GetUserName();
+            personalUserFiles = new List<UserFile>();
             InitializeComponent();
             comboBoxUsers.Enabled = false;
             buttonSelectUser.Enabled = false;
             
-
             labelName.Text = "Вітаю, " + userName;
         }
 
         private void buttonAddFile_Click(object sender, EventArgs e)
         {
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = "c:\\";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            var newFile = _functions.SelectFile(true);
+            if (newFile != null)
             {
-                //Get the path of specified file
-                string filePath = openFileDialog.FileName;
-
-                //Read the contents of the file into a stream
-                var fileStream = openFileDialog.OpenFile();
+                personalUserFiles.Add(newFile);
+                _functions.UpdateDataGridView(dataGridView1, personalUserFiles);
             }
         }
 
@@ -54,8 +52,14 @@ namespace CSharp_LB6
 
         private void buttonSelectUser_Click(object sender, EventArgs e)
         {
-            UserNameDialog userNameDialog = new UserNameDialog();
-            userNameDialog.ShowDialog();
+            /*var dialogAboutFile = new DialogAboutFile();
+            dialogAboutFile.ShowDialog();*/
+        }
+
+        private void changeUserNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var userName = _functions.GetUserNameFromDialog();
+            labelName.Text = "Вітаю, " + userName;
         }
     }
 }

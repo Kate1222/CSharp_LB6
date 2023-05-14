@@ -1,19 +1,23 @@
-﻿namespace CSharp_LB6
+﻿using System;
+
+namespace CSharp_LB6
 {
     public class UserFile
     {
-        private string _name;
-        private string _format;
-        private string _fileWeight;
-        private string _path;
+        public string name;
+        public long fileWeight;
+        public string path;
+        public DateTime createDate;
+        public bool isAvailable;
 
-        public UserFile(string name, string format, string fileWeight, string path)
+        /*public UserFile(string name, string format, string fileWeight, string path, bool isAvailable)
         {
             this._name = name;
             this._format = format;
             this._fileWeight = fileWeight;
             this._path = path;
-        }
+            this._isAvailable = isAvailable;
+        }*/
         //createDate
     }
 }
