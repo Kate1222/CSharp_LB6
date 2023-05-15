@@ -42,7 +42,7 @@ namespace CSharp_LB6
             File.WriteAllText("username.json", saveUserNameJsonFile);
         }
 
-        public UserFile SelectFile(bool openDialodAboutFile)
+        public UserFile SelectFile(bool openDialodAboutFile, List<UserFile> userFiles)
         {
             var newFile = new UserFile();
             var openFileDialog = new OpenFileDialog();
@@ -54,13 +54,23 @@ namespace CSharp_LB6
                 newFile.fileWeight = fInfo.Length;
                 newFile.path = fInfo.DirectoryName;
                 newFile.createDate = fInfo.CreationTime;
-                
-                //open save file
-                if (openDialodAboutFile)
+
+                var findUserFile = userFiles.Find(x => x.name.Equals(newFile.name) && x.path.Equals(newFile.path));
+                if (findUserFile == null)
                 {
-                    var dialogAboutFile = new DialogAboutFile(newFile);
-                    dialogAboutFile.ShowDialog();
-                    newFile = dialogAboutFile.userFile;
+                    //open save file
+                    if (openDialodAboutFile)
+                    {
+                        var dialogAboutFile = new DialogAboutFile(newFile, userFiles);
+                        dialogAboutFile.ShowDialog();
+                        newFile = dialogAboutFile.userFile;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Цей файл вже доданий до списку!", "Error!", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    newFile = null;
                 }
             }
 
