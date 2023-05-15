@@ -41,14 +41,12 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeUserNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonChangeFileStatus = new System.Windows.Forms.Button();
             this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FileWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FilePath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FileDataCreate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IsAvailable = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.buttonRemoveFile = new System.Windows.Forms.Button();
             this.groupBoxMode.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBoxUsers.SuspendLayout();
@@ -58,7 +56,7 @@
             // buttonAddFile
             // 
             this.buttonAddFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAddFile.Location = new System.Drawing.Point(1272, 27);
+            this.buttonAddFile.Location = new System.Drawing.Point(1081, 27);
             this.buttonAddFile.Name = "buttonAddFile";
             this.buttonAddFile.Size = new System.Drawing.Size(91, 56);
             this.buttonAddFile.TabIndex = 0;
@@ -106,7 +104,7 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { this.Number, this.FileName, this.FileWeight, this.FilePath, this.FileDataCreate, this.IsAvailable });
             this.dataGridView1.Location = new System.Drawing.Point(12, 133);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1351, 616);
+            this.dataGridView1.Size = new System.Drawing.Size(1160, 616);
             this.dataGridView1.TabIndex = 2;
             // 
             // comboBoxUsers
@@ -124,7 +122,7 @@
             this.groupBoxUsers.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.groupBoxUsers.Controls.Add(this.buttonSelectUser);
             this.groupBoxUsers.Controls.Add(this.comboBoxUsers);
-            this.groupBoxUsers.Location = new System.Drawing.Point(507, 59);
+            this.groupBoxUsers.Location = new System.Drawing.Point(412, 59);
             this.groupBoxUsers.Name = "groupBoxUsers";
             this.groupBoxUsers.Size = new System.Drawing.Size(482, 68);
             this.groupBoxUsers.TabIndex = 2;
@@ -144,7 +142,7 @@
             // labelName
             // 
             this.labelName.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.labelName.Location = new System.Drawing.Point(507, 28);
+            this.labelName.Location = new System.Drawing.Point(412, 28);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(482, 26);
             this.labelName.TabIndex = 3;
@@ -155,7 +153,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.файлToolStripMenuItem });
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1375, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1184, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -169,35 +167,20 @@
             // changeUserNameToolStripMenuItem
             // 
             this.changeUserNameToolStripMenuItem.Name = "changeUserNameToolStripMenuItem";
-            this.changeUserNameToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.changeUserNameToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.changeUserNameToolStripMenuItem.Text = "Змінити ім\'я";
             this.changeUserNameToolStripMenuItem.Click += new System.EventHandler(this.changeUserNameToolStripMenuItem_Click);
-            // 
-            // buttonChangeFileStatus
-            // 
-            this.buttonChangeFileStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonChangeFileStatus.Enabled = false;
-            this.buttonChangeFileStatus.Location = new System.Drawing.Point(1175, 27);
-            this.buttonChangeFileStatus.Name = "buttonChangeFileStatus";
-            this.buttonChangeFileStatus.Size = new System.Drawing.Size(91, 56);
-            this.buttonChangeFileStatus.TabIndex = 5;
-            this.buttonChangeFileStatus.Text = "Змінити доступ";
-            this.buttonChangeFileStatus.UseVisualStyleBackColor = true;
-            this.buttonChangeFileStatus.Click += new System.EventHandler(this.buttonChangeFileStatus_Click);
             // 
             // Number
             // 
             this.Number.HeaderText = "№";
-            this.Number.MinimumWidth = 70;
             this.Number.Name = "Number";
             this.Number.ReadOnly = true;
-            this.Number.Width = 70;
             // 
             // FileName
             // 
             this.FileName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.FileName.HeaderText = "Назва файлу";
-            this.FileName.MinimumWidth = 100;
             this.FileName.Name = "FileName";
             this.FileName.ReadOnly = true;
             // 
@@ -205,7 +188,6 @@
             // 
             this.FileWeight.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.FileWeight.HeaderText = "Вага файлу";
-            this.FileWeight.MinimumWidth = 100;
             this.FileWeight.Name = "FileWeight";
             this.FileWeight.ReadOnly = true;
             // 
@@ -213,7 +195,6 @@
             // 
             this.FilePath.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.FilePath.HeaderText = "Путь";
-            this.FilePath.MinimumWidth = 100;
             this.FilePath.Name = "FilePath";
             this.FilePath.ReadOnly = true;
             // 
@@ -221,7 +202,6 @@
             // 
             this.FileDataCreate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.FileDataCreate.HeaderText = "Дата створення";
-            this.FileDataCreate.MinimumWidth = 100;
             this.FileDataCreate.Name = "FileDataCreate";
             this.FileDataCreate.ReadOnly = true;
             // 
@@ -229,29 +209,14 @@
             // 
             this.IsAvailable.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.IsAvailable.HeaderText = "Доступний для передачі?";
-            this.IsAvailable.MinimumWidth = 100;
             this.IsAvailable.Name = "IsAvailable";
             this.IsAvailable.ReadOnly = true;
-            // 
-            // buttonRemoveFile
-            // 
-            this.buttonRemoveFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRemoveFile.Enabled = false;
-            this.buttonRemoveFile.Location = new System.Drawing.Point(1064, 28);
-            this.buttonRemoveFile.Name = "buttonRemoveFile";
-            this.buttonRemoveFile.Size = new System.Drawing.Size(105, 56);
-            this.buttonRemoveFile.TabIndex = 6;
-            this.buttonRemoveFile.Text = "Видалити файл";
-            this.buttonRemoveFile.UseVisualStyleBackColor = true;
-            this.buttonRemoveFile.Click += new System.EventHandler(this.buttonRemoveFile_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1375, 761);
-            this.Controls.Add(this.buttonRemoveFile);
-            this.Controls.Add(this.buttonChangeFileStatus);
+            this.ClientSize = new System.Drawing.Size(1184, 761);
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.groupBoxUsers);
             this.Controls.Add(this.dataGridView1);
@@ -273,10 +238,6 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
-
-        private System.Windows.Forms.Button buttonRemoveFile;
-
-        private System.Windows.Forms.Button buttonChangeFileStatus;
 
         private System.Windows.Forms.DataGridViewTextBoxColumn IsAvailable;
 

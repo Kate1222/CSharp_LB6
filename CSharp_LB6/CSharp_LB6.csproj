@@ -81,12 +81,6 @@
         <Compile Include="DialogAboutFile.Designer.cs">
           <DependentUpon>DialogAboutFile.cs</DependentUpon>
         </Compile>
-        <Compile Include="DialogChangeAccessFile.cs">
-          <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="DialogChangeAccessFile.Designer.cs">
-          <DependentUpon>DialogChangeAccessFile.cs</DependentUpon>
-        </Compile>
         <Compile Include="Functions.cs" />
         <Compile Include="UserFile.cs" />
         <Compile Include="Form1.cs">
@@ -105,9 +99,6 @@
         </Compile>
         <EmbeddedResource Include="DialogAboutFile.resx">
           <DependentUpon>DialogAboutFile.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="DialogChangeAccessFile.resx">
-          <DependentUpon>DialogChangeAccessFile.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="Form1.resx">
           <DependentUpon>Form1.cs</DependentUpon>

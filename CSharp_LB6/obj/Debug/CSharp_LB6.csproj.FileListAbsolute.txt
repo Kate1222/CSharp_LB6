@@ -30,4 +30,3 @@ C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\bin\Debug\Syst
 C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\obj\Debug\CSharp_LB6.csproj.CopyComplete
 C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\obj\Debug\CSharp_LB6.UserNameDialog.resources
 C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\obj\Debug\CSharp_LB6.DialogAboutFile.resources
-C:\Users\vlad3\OneDrive\Desktop\Projects\C#\CSharp_LB6\CSharp_LB6\obj\Debug\CSharp_LB6.DialogChangeAccessFile.resources

@@ -30,13 +30,11 @@ namespace CSharp_LB6
 
         private void buttonAddFile_Click(object sender, EventArgs e)
         {
-            var newFile = _functions.SelectFile(true, personalUserFiles);
+            var newFile = _functions.SelectFile(true);
             if (newFile != null)
             {
                 personalUserFiles.Add(newFile);
                 _functions.UpdateDataGridView(dataGridView1, personalUserFiles);
-                buttonChangeFileStatus.Enabled = true;
-                buttonRemoveFile.Enabled = true;
             }
         }
 
@@ -62,40 +60,6 @@ namespace CSharp_LB6
         {
             var userName = _functions.GetUserNameFromDialog();
             labelName.Text = "Вітаю, " + userName;
-        }
-
-        private void buttonChangeFileStatus_Click(object sender, EventArgs e)
-        {
-            if (dataGridView1.CurrentCell.RowIndex == personalUserFiles.Count)
-                MessageBox.Show("Неправильно обраний індекс!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else
-            {
-                var dialogChangeAccessFile =
-                    new DialogChangeAccessFile(personalUserFiles, dataGridView1.CurrentCell.RowIndex);
-                dialogChangeAccessFile.ShowDialog();
-                _functions.UpdateDataGridView(dataGridView1, personalUserFiles);
-            }
-        }
-
-        private void buttonRemoveFile_Click(object sender, EventArgs e)
-        {
-            if (dataGridView1.CurrentCell.RowIndex == personalUserFiles.Count)
-                MessageBox.Show("Неправильно обраний індекс!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else
-            {
-                DialogResult mb = MessageBox.Show("Ви дійсно бажаєте видалити цей файл?", "Question?",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (mb == DialogResult.Yes)
-                {
-                    personalUserFiles.RemoveAt(dataGridView1.CurrentCell.RowIndex);
-                    _functions.UpdateDataGridView(dataGridView1, personalUserFiles);
-                    if (personalUserFiles.Count == 0)
-                    {
-                        buttonRemoveFile.Enabled = false;
-                        buttonChangeFileStatus.Enabled = false;
-                    }
-                }
-            }
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
 
@@ -8,7 +7,6 @@ namespace CSharp_LB6
     public partial class DialogAboutFile : Form
     {
         public UserFile userFile;
-        private List<UserFile> _userFiles;
 
         private void SetScreenInfo()
         {
@@ -18,10 +16,9 @@ namespace CSharp_LB6
             labelDataCreate.Text = userFile.createDate.ToString(CultureInfo.InvariantCulture);
         }
         
-        internal DialogAboutFile(UserFile getUserFile, List<UserFile> userFiles)
+        internal DialogAboutFile(UserFile getUserFile)
         {
             userFile = getUserFile;
-            _userFiles = userFiles; 
             InitializeComponent();
             this.ControlBox = false;
             SetScreenInfo();
@@ -42,7 +39,7 @@ namespace CSharp_LB6
         private void buttonChooseAnother_Click(object sender, EventArgs e)
         {
             var functions = new Functions();
-            var newUserFile = functions.SelectFile(false, _userFiles);
+            var newUserFile = functions.SelectFile(false);
             if (newUserFile.name != null)
             {
                 userFile = newUserFile;
