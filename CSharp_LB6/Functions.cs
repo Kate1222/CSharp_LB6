@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text.Json;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace CSharp_LB6
 {
@@ -91,5 +92,34 @@ namespace CSharp_LB6
                     userFiles[i].path, userFiles[i].createDate, sighn);
             }
         }
+
+        public void SerializeXML(List<UserFile> userFiles)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(List<UserFile>));
+
+            using (var fs = new FileStream("UserData.xml", FileMode.Create))
+            {
+                xmlSerializer.Serialize(fs, userFiles);
+            }
+        }
+
+        public List<UserFile> DeserializeXML()
+        {
+            var xmlSerializer = new XmlSerializer(typeof(List<UserFile>));
+            
+            using (var fs = new FileStream("UserData.xml", FileMode.Open))
+            {
+                var deserializeUserFiles = (List<UserFile>)xmlSerializer.Deserialize(fs);
+                return deserializeUserFiles;
+            }
+        }
+
+        /*internal void LinkToServer()
+        {
+            while (true)
+            {
+                
+            }
+        }*/
     }
 }

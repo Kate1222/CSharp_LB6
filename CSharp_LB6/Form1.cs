@@ -21,11 +21,25 @@ namespace CSharp_LB6
         {
             var userName = _functions.GetUserName();
             personalUserFiles = new List<UserFile>();
+
             InitializeComponent();
             comboBoxUsers.Enabled = false;
             buttonSelectUser.Enabled = false;
             
             labelName.Text = "Вітаю, " + userName;
+            
+            
+            if (File.Exists("UserData.xml"))
+            {
+                personalUserFiles = _functions.DeserializeXML();
+                if (personalUserFiles.Count > 0)
+                {
+                    _functions.UpdateDataGridView(dataGridView1, personalUserFiles);
+                    buttonChangeFileStatus.Enabled = true;
+                    buttonRemoveFile.Enabled = true;
+                    buttonRemoveFile.Enabled = true;
+                }
+            }
         }
 
         private void buttonAddFile_Click(object sender, EventArgs e)
@@ -38,6 +52,7 @@ namespace CSharp_LB6
                 buttonChangeFileStatus.Enabled = true;
                 buttonRemoveFile.Enabled = true;
             }
+            _functions.SerializeXML(personalUserFiles);
         }
 
         private void radioButtonClientFiles_CheckedChanged(object sender, EventArgs e)
@@ -74,6 +89,7 @@ namespace CSharp_LB6
                     new DialogChangeAccessFile(personalUserFiles, dataGridView1.CurrentCell.RowIndex);
                 dialogChangeAccessFile.ShowDialog();
                 _functions.UpdateDataGridView(dataGridView1, personalUserFiles);
+                _functions.SerializeXML(personalUserFiles);
             }
         }
 
@@ -94,8 +110,14 @@ namespace CSharp_LB6
                         buttonRemoveFile.Enabled = false;
                         buttonChangeFileStatus.Enabled = false;
                     }
+                    _functions.SerializeXML(personalUserFiles);
                 }
             }
+        }
+        
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            
         }
     }
 }
