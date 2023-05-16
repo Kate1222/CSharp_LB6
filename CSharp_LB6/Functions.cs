@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Net.Sockets;
+using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
@@ -8,6 +12,8 @@ namespace CSharp_LB6
 {
     public class Functions
     {
+        private string serverIP = "192.168.31.202";
+        
         public string GetUserNameFromDialog()
         {
             var userNameDialog = new UserNameDialog();
@@ -40,6 +46,8 @@ namespace CSharp_LB6
         private static void SaveToJson(string userName)
         {
             var saveUserNameJsonFile = JsonSerializer.Serialize(userName);
+            if (!Directory.Exists("data"))
+                Directory.CreateDirectory("data");
             File.WriteAllText("username.json", saveUserNameJsonFile);
         }
 
@@ -71,7 +79,7 @@ namespace CSharp_LB6
                 {
                     MessageBox.Show("Цей файл вже доданий до списку!", "Error!", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
-                    newFile = null;
+                    newFile = new UserFile();
                 }
             }
 
@@ -93,33 +101,64 @@ namespace CSharp_LB6
             }
         }
 
-        public void SerializeXML(List<UserFile> userFiles)
+        public void SerializeXML(List<UserFile> userFiles, string userName)
         {
             var xmlSerializer = new XmlSerializer(typeof(List<UserFile>));
 
-            using (var fs = new FileStream("UserData.xml", FileMode.Create))
-            {
+            using (var fs = new FileStream(userName + "UserData.xml", FileMode.Create))
                 xmlSerializer.Serialize(fs, userFiles);
-            }
         }
 
-        public List<UserFile> DeserializeXML()
+        public List<UserFile> DeserializeXML(string userName)
         {
             var xmlSerializer = new XmlSerializer(typeof(List<UserFile>));
             
-            using (var fs = new FileStream("UserData.xml", FileMode.Open))
+            using (var fs = new FileStream(userName + "UserData.xml", FileMode.Open))
             {
                 var deserializeUserFiles = (List<UserFile>)xmlSerializer.Deserialize(fs);
                 return deserializeUserFiles;
             }
         }
 
-        /*internal void LinkToServer()
+        internal string LinkToServer()
         {
-            while (true)
+            string result;
+            try
             {
-                
+                TcpClient client = new TcpClient(serverIP, 1234);
+                result = "Online";
             }
-        }*/
+            catch
+            {
+                result = "Offline";
+            }
+
+            return result;
+        }
+
+        internal void SendFilesInfo(string userName)
+        {
+            TcpClient client = new TcpClient(serverIP, 1234);
+
+            NetworkStream stream = client.GetStream();
+
+            // Send the file name to the server
+            string filePath = userName + "UserData.xml";
+            var fileName = Path.GetFileName(filePath);
+            var fileNameBuffer = Encoding.ASCII.GetBytes(fileName);
+            Thread.Sleep(2);
+            stream.Write(fileNameBuffer, 0, fileNameBuffer.Length);
+
+            // Send the file content to the server
+            using (var fileStream = File.OpenRead(filePath)) {
+                var buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) > 0) {
+                    stream.Write(buffer, 0, bytesRead);
+                }
+            }
+
+            client.Close();
+        }
     }
 }

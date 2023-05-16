@@ -34,6 +34,12 @@
             this.radioButtonOtherFiles = new System.Windows.Forms.RadioButton();
             this.radioButtonClientFiles = new System.Windows.Forms.RadioButton();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FileWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FilePath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FileDataCreate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IsAvailable = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.comboBoxUsers = new System.Windows.Forms.ComboBox();
             this.groupBoxUsers = new System.Windows.Forms.GroupBox();
             this.buttonSelectUser = new System.Windows.Forms.Button();
@@ -42,13 +48,8 @@
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeUserNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonChangeFileStatus = new System.Windows.Forms.Button();
-            this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FileWeight = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FilePath = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FileDataCreate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.IsAvailable = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.buttonRemoveFile = new System.Windows.Forms.Button();
+            this.labelServerStatus = new System.Windows.Forms.Label();
             this.groupBoxMode.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBoxUsers.SuspendLayout();
@@ -58,7 +59,7 @@
             // buttonAddFile
             // 
             this.buttonAddFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAddFile.Location = new System.Drawing.Point(1272, 27);
+            this.buttonAddFile.Location = new System.Drawing.Point(1013, 28);
             this.buttonAddFile.Name = "buttonAddFile";
             this.buttonAddFile.Size = new System.Drawing.Size(91, 56);
             this.buttonAddFile.TabIndex = 0;
@@ -73,7 +74,7 @@
             this.groupBoxMode.Location = new System.Drawing.Point(39, 27);
             this.groupBoxMode.Name = "groupBoxMode";
             this.groupBoxMode.Size = new System.Drawing.Size(229, 100);
-            this.groupBoxMode.TabIndex = 1;
+            this.groupBoxMode.TabIndex = 6;
             this.groupBoxMode.TabStop = false;
             this.groupBoxMode.Text = "Mode";
             // 
@@ -106,84 +107,8 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { this.Number, this.FileName, this.FileWeight, this.FilePath, this.FileDataCreate, this.IsAvailable });
             this.dataGridView1.Location = new System.Drawing.Point(12, 133);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1351, 616);
-            this.dataGridView1.TabIndex = 2;
-            // 
-            // comboBoxUsers
-            // 
-            this.comboBoxUsers.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.comboBoxUsers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxUsers.FormattingEnabled = true;
-            this.comboBoxUsers.Location = new System.Drawing.Point(6, 25);
-            this.comboBoxUsers.Name = "comboBoxUsers";
-            this.comboBoxUsers.Size = new System.Drawing.Size(343, 32);
-            this.comboBoxUsers.TabIndex = 3;
-            // 
-            // groupBoxUsers
-            // 
-            this.groupBoxUsers.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.groupBoxUsers.Controls.Add(this.buttonSelectUser);
-            this.groupBoxUsers.Controls.Add(this.comboBoxUsers);
-            this.groupBoxUsers.Location = new System.Drawing.Point(507, 59);
-            this.groupBoxUsers.Name = "groupBoxUsers";
-            this.groupBoxUsers.Size = new System.Drawing.Size(482, 68);
-            this.groupBoxUsers.TabIndex = 2;
-            this.groupBoxUsers.TabStop = false;
-            this.groupBoxUsers.Text = "Users";
-            // 
-            // buttonSelectUser
-            // 
-            this.buttonSelectUser.Location = new System.Drawing.Point(365, 25);
-            this.buttonSelectUser.Name = "buttonSelectUser";
-            this.buttonSelectUser.Size = new System.Drawing.Size(111, 32);
-            this.buttonSelectUser.TabIndex = 4;
-            this.buttonSelectUser.Text = "Обрати";
-            this.buttonSelectUser.UseVisualStyleBackColor = true;
-            this.buttonSelectUser.Click += new System.EventHandler(this.buttonSelectUser_Click);
-            // 
-            // labelName
-            // 
-            this.labelName.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.labelName.Location = new System.Drawing.Point(507, 28);
-            this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(482, 26);
-            this.labelName.TabIndex = 3;
-            this.labelName.Text = "Вітаю, ";
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.файлToolStripMenuItem });
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1375, 24);
-            this.menuStrip1.TabIndex = 4;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // файлToolStripMenuItem
-            // 
-            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.changeUserNameToolStripMenuItem });
-            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
-            this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
-            this.файлToolStripMenuItem.Text = "Файл";
-            // 
-            // changeUserNameToolStripMenuItem
-            // 
-            this.changeUserNameToolStripMenuItem.Name = "changeUserNameToolStripMenuItem";
-            this.changeUserNameToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.changeUserNameToolStripMenuItem.Text = "Змінити ім\'я";
-            this.changeUserNameToolStripMenuItem.Click += new System.EventHandler(this.changeUserNameToolStripMenuItem_Click);
-            // 
-            // buttonChangeFileStatus
-            // 
-            this.buttonChangeFileStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonChangeFileStatus.Enabled = false;
-            this.buttonChangeFileStatus.Location = new System.Drawing.Point(1175, 27);
-            this.buttonChangeFileStatus.Name = "buttonChangeFileStatus";
-            this.buttonChangeFileStatus.Size = new System.Drawing.Size(91, 56);
-            this.buttonChangeFileStatus.TabIndex = 5;
-            this.buttonChangeFileStatus.Text = "Змінити доступ";
-            this.buttonChangeFileStatus.UseVisualStyleBackColor = true;
-            this.buttonChangeFileStatus.Click += new System.EventHandler(this.buttonChangeFileStatus_Click);
+            this.dataGridView1.Size = new System.Drawing.Size(1300, 556);
+            this.dataGridView1.TabIndex = 5;
             // 
             // Number
             // 
@@ -233,23 +158,108 @@
             this.IsAvailable.Name = "IsAvailable";
             this.IsAvailable.ReadOnly = true;
             // 
+            // comboBoxUsers
+            // 
+            this.comboBoxUsers.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.comboBoxUsers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxUsers.FormattingEnabled = true;
+            this.comboBoxUsers.Location = new System.Drawing.Point(6, 25);
+            this.comboBoxUsers.Name = "comboBoxUsers";
+            this.comboBoxUsers.Size = new System.Drawing.Size(343, 32);
+            this.comboBoxUsers.TabIndex = 3;
+            // 
+            // groupBoxUsers
+            // 
+            this.groupBoxUsers.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.groupBoxUsers.Controls.Add(this.buttonSelectUser);
+            this.groupBoxUsers.Controls.Add(this.comboBoxUsers);
+            this.groupBoxUsers.Location = new System.Drawing.Point(482, 59);
+            this.groupBoxUsers.Name = "groupBoxUsers";
+            this.groupBoxUsers.Size = new System.Drawing.Size(482, 68);
+            this.groupBoxUsers.TabIndex = 2;
+            this.groupBoxUsers.TabStop = false;
+            this.groupBoxUsers.Text = "Users";
+            // 
+            // buttonSelectUser
+            // 
+            this.buttonSelectUser.Location = new System.Drawing.Point(365, 25);
+            this.buttonSelectUser.Name = "buttonSelectUser";
+            this.buttonSelectUser.Size = new System.Drawing.Size(111, 32);
+            this.buttonSelectUser.TabIndex = 4;
+            this.buttonSelectUser.Text = "Обрати";
+            this.buttonSelectUser.UseVisualStyleBackColor = true;
+            this.buttonSelectUser.Click += new System.EventHandler(this.buttonSelectUser_Click);
+            // 
+            // labelName
+            // 
+            this.labelName.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.labelName.Location = new System.Drawing.Point(482, 28);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(482, 26);
+            this.labelName.TabIndex = 3;
+            this.labelName.Text = "Вітаю, ";
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.файлToolStripMenuItem });
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1324, 24);
+            this.menuStrip1.TabIndex = 4;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // файлToolStripMenuItem
+            // 
+            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.changeUserNameToolStripMenuItem });
+            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
+            this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.файлToolStripMenuItem.Text = "Файл";
+            // 
+            // changeUserNameToolStripMenuItem
+            // 
+            this.changeUserNameToolStripMenuItem.Name = "changeUserNameToolStripMenuItem";
+            this.changeUserNameToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.changeUserNameToolStripMenuItem.Text = "Змінити ім\'я";
+            this.changeUserNameToolStripMenuItem.Click += new System.EventHandler(this.changeUserNameToolStripMenuItem_Click);
+            // 
+            // buttonChangeFileStatus
+            // 
+            this.buttonChangeFileStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonChangeFileStatus.Enabled = false;
+            this.buttonChangeFileStatus.Location = new System.Drawing.Point(1221, 27);
+            this.buttonChangeFileStatus.Name = "buttonChangeFileStatus";
+            this.buttonChangeFileStatus.Size = new System.Drawing.Size(91, 56);
+            this.buttonChangeFileStatus.TabIndex = 2;
+            this.buttonChangeFileStatus.Text = "Змінити доступ";
+            this.buttonChangeFileStatus.UseVisualStyleBackColor = true;
+            this.buttonChangeFileStatus.Click += new System.EventHandler(this.buttonChangeFileStatus_Click);
+            // 
             // buttonRemoveFile
             // 
             this.buttonRemoveFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonRemoveFile.Enabled = false;
-            this.buttonRemoveFile.Location = new System.Drawing.Point(1064, 28);
+            this.buttonRemoveFile.Location = new System.Drawing.Point(1110, 27);
             this.buttonRemoveFile.Name = "buttonRemoveFile";
             this.buttonRemoveFile.Size = new System.Drawing.Size(105, 56);
-            this.buttonRemoveFile.TabIndex = 6;
+            this.buttonRemoveFile.TabIndex = 1;
             this.buttonRemoveFile.Text = "Видалити файл";
             this.buttonRemoveFile.UseVisualStyleBackColor = true;
             this.buttonRemoveFile.Click += new System.EventHandler(this.buttonRemoveFile_Click);
+            // 
+            // labelServerStatus
+            // 
+            this.labelServerStatus.Location = new System.Drawing.Point(300, 27);
+            this.labelServerStatus.Name = "labelServerStatus";
+            this.labelServerStatus.Size = new System.Drawing.Size(157, 98);
+            this.labelServerStatus.TabIndex = 7;
+            this.labelServerStatus.Text = "Server status: unknown";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1375, 761);
+            this.ClientSize = new System.Drawing.Size(1324, 701);
+            this.Controls.Add(this.labelServerStatus);
             this.Controls.Add(this.buttonRemoveFile);
             this.Controls.Add(this.buttonChangeFileStatus);
             this.Controls.Add(this.labelName);
@@ -261,11 +271,11 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(6);
-            this.MinimumSize = new System.Drawing.Size(1200, 800);
+            this.MinimumSize = new System.Drawing.Size(1340, 740);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Text = "Files";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.groupBoxMode.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBoxUsers.ResumeLayout(false);
@@ -274,6 +284,8 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.Label labelServerStatus;
 
         private System.Windows.Forms.Button buttonRemoveFile;
 
