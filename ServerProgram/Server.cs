@@ -40,6 +40,7 @@ namespace ServerProgram
                     // Receive the file name from the client
                     string fileName = await _functions.FunctionReceive(stream);
                     Console.WriteLine("Receiving file: " + fileName);
+                    Thread.Sleep(150);
 
                     // Create a file stream to save the received file
                     string filePath = Path.Combine(DataDirectory, fileName);
@@ -130,6 +131,23 @@ namespace ServerProgram
                         Console.WriteLine("List send successful!");
                     }
 
+                    break;
+                }
+                case "remove file":
+                {
+                    string fileName = await _functions.FunctionReceive(stream);
+                    Console.WriteLine("Requested file: " + fileName);
+
+                    string filePath = Path.Combine(DataDirectory, fileName);
+                    if (!File.Exists(filePath))
+                        await _functions.FunctionResponse(stream, "File not found");
+                    else
+                    {
+                        File.Delete(filePath);
+                        await _functions.FunctionResponse(stream, "Success!");
+                        Console.WriteLine("Success delete!");
+                    }
+                    
                     break;
                 }
             }

@@ -56,7 +56,7 @@ namespace CSharp_LB6
             
         }*/
 
-        public UserFile SelectFile(bool openDialodAboutFile, List<UserFile> userFiles)
+        public UserFile SelectFile(bool openDialogAboutFile, List<UserFile> userFiles)
         {
             var newFile = new UserFile();
             var openFileDialog = new OpenFileDialog();
@@ -73,7 +73,7 @@ namespace CSharp_LB6
                 if (findUserFile == null)
                 {
                     //open save file
-                    if (openDialodAboutFile)
+                    if (openDialogAboutFile)
                     {
                         var dialogAboutFile = new DialogAboutFile(newFile, userFiles);
                         dialogAboutFile.ShowDialog();
@@ -130,7 +130,7 @@ namespace CSharp_LB6
             string result;
             try
             {
-                var client = new TcpClient(serverIP, 0001);
+                var client = new TcpClient(serverIP, 1111);
                 result = "Online";
             }
             catch
@@ -141,20 +141,34 @@ namespace CSharp_LB6
             return result;
         }
 
-        internal void SendRequestToServer(string value, string userName)
+        internal void SendFileToServer(string value, string userName)
         {
-            //make request.json
-            SerializeJson(value, userName + "request.json");
-            
-            var client = new TcpClient(serverIP, 0001);
+            var client = new TcpClient(serverIP, 1111);
 
             var stream = client.GetStream();
+            
+            byte[] requestBuffer = Encoding.ASCII.GetBytes("send");
+            stream.Write(requestBuffer, 0, requestBuffer.Length);
+            Thread.Sleep(50);
+            
+            // Send the file name to the server
+            string fileName = Path.GetFileName(userName + "UserData.xml");
+            byte[] fileNameBuffer = Encoding.ASCII.GetBytes(fileName);
+            stream.Write(fileNameBuffer, 0, fileNameBuffer.Length);
+            Thread.Sleep(1000);
+            // Send the file content to the server
+            using (FileStream fileStream = File.OpenRead(userName + "UserData.xml")) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) > 0)
+                    stream.Write(buffer, 0, bytesRead);
+            }
 
             // Send the file name to the server
-            var filePath = userName + "request.json";
+            /*var filePath = userName + "request.json";
             var fileName = Path.GetFileName(filePath);
             var fileNameBuffer = Encoding.ASCII.GetBytes(fileName);
-            Thread.Sleep(2);
+            Thread.Sleep(50);
             stream.Write(fileNameBuffer, 0, fileNameBuffer.Length);
 
             // Send the file content to the server
@@ -164,7 +178,7 @@ namespace CSharp_LB6
                 while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) > 0) {
                     stream.Write(buffer, 0, bytesRead);
                 }
-            }
+            }*/
 
             client.Close();
         }

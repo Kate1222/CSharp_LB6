@@ -28,9 +28,9 @@ namespace CSharp_LB6
 
         private static void StartSendFileInfo()
         {
-            _functions.SendRequestToServer("send", userName);
+            _functions.SendFileToServer("send", userName);
             Thread.Sleep(2000);
-            _functions.SendFilesInfo(userName);
+            //_functions.SendFilesInfo(userName);
         }
 
         public Form1()
@@ -60,6 +60,7 @@ namespace CSharp_LB6
             ThreadStart threadStartLinkToServer = (StartLinkToServer);
             threadCheckStatusServer = new Thread(threadStartLinkToServer);
             threadCheckStatusServer.Start();
+            //_functions.SendFileToServer("send", userName);
         }
 
         private void buttonAddFile_Click(object sender, EventArgs e)
