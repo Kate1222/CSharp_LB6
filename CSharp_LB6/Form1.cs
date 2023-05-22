@@ -10,13 +10,11 @@ namespace CSharp_LB6
     {
         private static Functions _functions = new Functions();
         private List<UserFile> personalUserFiles;
-        private List<string> usersName;
+        //private List<string> usersName;
         private string serverStatus = "unknown";
         //private string serverStatus = "Online";
         private Thread threadCheckStatusServer;
         private static string userName;
-        
-        
         
         private void StartLinkToServer()
         {
@@ -30,7 +28,9 @@ namespace CSharp_LB6
 
         private static void StartSendFileInfo()
         {
-             _functions.SendFilesInfo(userName);
+            _functions.SendRequestToServer("send", userName);
+            Thread.Sleep(2000);
+            _functions.SendFilesInfo(userName);
         }
 
         public Form1()
@@ -47,7 +47,7 @@ namespace CSharp_LB6
             
             if (File.Exists(userName + "UserData.xml"))
             {
-                personalUserFiles = _functions.DeserializeXML(userName);
+                personalUserFiles = _functions.DeserializeXml(userName);
                 if (personalUserFiles.Count > 0)
                 {
                     _functions.UpdateDataGridView(dataGridView1, personalUserFiles);
@@ -72,7 +72,7 @@ namespace CSharp_LB6
                 buttonChangeFileStatus.Enabled = true;
                 buttonRemoveFile.Enabled = true;
                 
-                _functions.SerializeXML(personalUserFiles, userName);
+                _functions.SerializeXml(personalUserFiles, userName);
                 
                 ThreadStart sendDataFile = new ThreadStart(StartSendFileInfo);
                 Thread threadSendDataFile = new Thread(sendDataFile);
@@ -125,7 +125,7 @@ namespace CSharp_LB6
                     new DialogChangeAccessFile(personalUserFiles, dataGridView1.CurrentCell.RowIndex);
                 dialogChangeAccessFile.ShowDialog();
                 _functions.UpdateDataGridView(dataGridView1, personalUserFiles);
-                _functions.SerializeXML(personalUserFiles, userName);
+                _functions.SerializeXml(personalUserFiles, userName);
                 
                 ThreadStart sendDataFile = new ThreadStart(StartSendFileInfo);
                 Thread threadSendDataFile = new Thread(sendDataFile);
@@ -151,7 +151,7 @@ namespace CSharp_LB6
                         buttonRemoveFile.Enabled = false;
                         buttonChangeFileStatus.Enabled = false;
                     }
-                    _functions.SerializeXML(personalUserFiles, userName);
+                    _functions.SerializeXml(personalUserFiles, userName);
                     ThreadStart sendDataFile = new ThreadStart(StartSendFileInfo);
                     Thread threadSendDataFile = new Thread(sendDataFile);
                     threadSendDataFile.Start();

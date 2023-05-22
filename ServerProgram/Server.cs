@@ -4,21 +4,22 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ServerProgram
 {
-    internal abstract class Server {
-        static List<TcpClient> clients = new List<TcpClient>();
-
+    internal abstract class Program {
+        private static readonly string DataDirectory = Path.Combine(Directory.GetCurrentDirectory(), "data");
+        private static readonly Functions _functions = new Functions();
+        
         private static async Task Main() {
-            var listener = new TcpListener(IPAddress.Parse("192.168.31.202"), 1234);
+            TcpListener listener = new TcpListener(IPAddress.Parse("192.168.31.99"), 1111);
             listener.Start();
-            Console.WriteLine("Server started on port 1234");
+            Console.WriteLine("Server started on port 1111");
 
             while (true) {
-                var client = await listener.AcceptTcpClientAsync();
-                clients.Add(client);
+                TcpClient client = await listener.AcceptTcpClientAsync();
                 Console.WriteLine("Client connected");
 
                 _ = HandleClientAsync(client);
@@ -26,31 +27,114 @@ namespace ServerProgram
         }
 
         private static async Task HandleClientAsync(TcpClient client) {
-            var stream = client.GetStream();
+            NetworkStream stream = client.GetStream();
 
-            // Receive the file name from the client
-            var fileNameBuffer = new byte[1024];
-            var fileNameBytesRead = await stream.ReadAsync(fileNameBuffer, 0, fileNameBuffer.Length);
-            var fileName = Encoding.ASCII.GetString(fileNameBuffer, 0, fileNameBytesRead);
-            Console.WriteLine("Receiving file: " + fileName);
+            // Receive the request from the client
+            var request = await _functions.FunctionReceive(stream);
+            Console.WriteLine("Received request: " + request);
+
+            switch (request)
+            {
+                case "send":
+                {
+                    // Receive the file name from the client
+                    string fileName = await _functions.FunctionReceive(stream);
+                    Console.WriteLine("Receiving file: " + fileName);
+
+                    // Create a file stream to save the received file
+                    string filePath = Path.Combine(DataDirectory, fileName);
+
+                    if (!Directory.Exists("data"))
+                        Directory.CreateDirectory("data");
             
-            if (File.Exists(fileName))
-                File.Delete(fileName);
+                    FileStream fileStream = File.Create(filePath);
 
-            // Create a file stream to save the received file
-            var fileStream = File.Create(fileName);
+                    // Receive the file content from the client and save it to the file stream
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0) {
+                        await fileStream.WriteAsync(buffer, 0, bytesRead);
+                    }
 
-            // Receive the file content from the client and save it to the file stream
-            var buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0) {
-                await fileStream.WriteAsync(buffer, 0, bytesRead);
+                    fileStream.Close();
+                    Console.WriteLine("File received and saved successfully");
+                    break;
+                }
+                case "get":
+                {
+                    // Receive the file name to send from the client
+                    string fileName = await _functions.FunctionReceive(stream);
+                    Console.WriteLine("Requested file: " + fileName);
+
+                    string filePath = Path.Combine(DataDirectory, fileName);
+
+                    // Send an error response to the client
+                    if (!Directory.Exists("data"))
+                        await _functions.FunctionResponse(stream, "File not found");
+                    else
+                    {
+                        if (File.Exists(filePath))
+                        {
+                            // Send the file name to the client
+                            byte[] responseBuffer = Encoding.ASCII.GetBytes(fileName);
+                            await stream.WriteAsync(responseBuffer, 0, responseBuffer.Length);
+
+                            // Send the file content to the client
+                            using (FileStream fileStream = File.OpenRead(filePath))
+                            {
+                                byte[] buffer = new byte[1024];
+                                int bytesRead;
+                                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) > 0)
+                                {
+                                    await stream.WriteAsync(buffer, 0, bytesRead);
+                                }
+                            }
+
+                            Console.WriteLine("File sent successfully");
+                        }
+                        // Send an error response to the client
+                        else
+                            await _functions.FunctionResponse(stream, "File not found");
+                    }
+
+                    break;
+                }
+                case "give files" when !Directory.Exists("data"):
+                {
+                    // Send an error response to the client
+                    await _functions.FunctionResponse(stream, "Files not found");
+                    Console.WriteLine("Files not found!");
+                    break;
+                }
+                case "give files":
+                {
+                    // Get the list of files in the "data" directory
+                    List<string> files = new List<string>(Directory.GetFiles(DataDirectory));
+                    
+                    if (files.Count == 0)
+                        await _functions.FunctionResponse(stream, "Files not found");
+                    else
+                    {
+                        // Send the list of files to the client
+                        await _functions.FunctionResponse(stream, "List of files on the server:");
+
+                        foreach (var file in files)
+                        {
+                            Thread.Sleep(50);
+                            var fileName = Path.GetFileName(file);
+                            var fileNameBuffer = Encoding.ASCII.GetBytes(fileName);
+                            await stream.WriteAsync(fileNameBuffer, 0, fileNameBuffer.Length);
+                            Thread.Sleep(50);
+                        }
+
+                        Console.WriteLine("List send successful!");
+                    }
+
+                    break;
+                }
             }
-
-            fileStream.Close();
             client.Close();
-            clients.Remove(client);
-            Console.WriteLine("File received and saved successfully");
+            Console.WriteLine("Client disconnected");
         }
     }
 }

@@ -12,7 +12,7 @@ namespace CSharp_LB6
 {
     public class Functions
     {
-        private string serverIP = "192.168.31.202";
+        private string serverIP = "192.168.31.99";
         
         public string GetUserNameFromDialog()
         {
@@ -20,7 +20,7 @@ namespace CSharp_LB6
             userNameDialog.ShowDialog();
             var userName = userNameDialog.userName;
             
-            SaveToJson(userName);
+            SerializeJson(userName, "username.json");
             
             return userName;
         }
@@ -32,7 +32,7 @@ namespace CSharp_LB6
             if (!File.Exists("username.json"))
             {
                 userName = GetUserNameFromDialog();
-                SaveToJson(userName);
+                SerializeJson(userName, "username.json");
             }
             else
             {
@@ -43,13 +43,18 @@ namespace CSharp_LB6
             return userName;
         }
 
-        private static void SaveToJson(string userName)
+        private static void SerializeJson(string text, string fileName)
         {
-            var saveUserNameJsonFile = JsonSerializer.Serialize(userName);
+            var saveJsonFile = JsonSerializer.Serialize(text);
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            File.WriteAllText("username.json", saveUserNameJsonFile);
+            File.WriteAllText(fileName, saveJsonFile);
         }
+        
+        /*private static string DesirializeJson()
+        {
+            
+        }*/
 
         public UserFile SelectFile(bool openDialodAboutFile, List<UserFile> userFiles)
         {
@@ -101,7 +106,7 @@ namespace CSharp_LB6
             }
         }
 
-        public void SerializeXML(List<UserFile> userFiles, string userName)
+        public void SerializeXml(List<UserFile> userFiles, string userName)
         {
             var xmlSerializer = new XmlSerializer(typeof(List<UserFile>));
 
@@ -109,7 +114,7 @@ namespace CSharp_LB6
                 xmlSerializer.Serialize(fs, userFiles);
         }
 
-        public List<UserFile> DeserializeXML(string userName)
+        public List<UserFile> DeserializeXml(string userName)
         {
             var xmlSerializer = new XmlSerializer(typeof(List<UserFile>));
             
@@ -125,7 +130,7 @@ namespace CSharp_LB6
             string result;
             try
             {
-                TcpClient client = new TcpClient(serverIP, 1234);
+                var client = new TcpClient(serverIP, 0001);
                 result = "Online";
             }
             catch
@@ -136,9 +141,37 @@ namespace CSharp_LB6
             return result;
         }
 
+        internal void SendRequestToServer(string value, string userName)
+        {
+            //make request.json
+            SerializeJson(value, userName + "request.json");
+            
+            var client = new TcpClient(serverIP, 0001);
+
+            var stream = client.GetStream();
+
+            // Send the file name to the server
+            var filePath = userName + "request.json";
+            var fileName = Path.GetFileName(filePath);
+            var fileNameBuffer = Encoding.ASCII.GetBytes(fileName);
+            Thread.Sleep(2);
+            stream.Write(fileNameBuffer, 0, fileNameBuffer.Length);
+
+            // Send the file content to the server
+            using (var fileStream = File.OpenRead(filePath)) {
+                var buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) > 0) {
+                    stream.Write(buffer, 0, bytesRead);
+                }
+            }
+
+            client.Close();
+        }
+
         internal void SendFilesInfo(string userName)
         {
-            TcpClient client = new TcpClient(serverIP, 1234);
+            TcpClient client = new TcpClient(serverIP, 0001);
 
             NetworkStream stream = client.GetStream();
 
