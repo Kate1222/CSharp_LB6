@@ -41,16 +41,15 @@ namespace CSharp_LB6
 
         public Form1()
         {
-            _userName = Functions.GetUserName();
+            _otherUsersName = Functions.GetOtherUsersName();
+            _userName = Functions.GetUserName(_otherUsersName);
             _personalUserFiles = new List<UserFile>();
-
             InitializeComponent();
             comboBoxUsers.Enabled = false;
             buttonSelectUser.Enabled = false;
             
             labelName.Text = "Вітаю, " + _userName;
-            
-            
+
             if (File.Exists("data/" + _userName + "UserData.xml"))
             {
                 _personalUserFiles = Functions.DeserializeXmlUserData(_userName);
@@ -62,6 +61,8 @@ namespace CSharp_LB6
                     buttonRemoveFile.Enabled = true;
                 }
             }
+            Functions.SerializeXmlUserData(_personalUserFiles, _userName);
+            Functions.SendFileToServer(_userName);
 
             ThreadStart threadStartLinkToServer = (StartLinkToServer);
             _threadCheckStatusServer = new Thread(threadStartLinkToServer);
@@ -207,6 +208,17 @@ namespace CSharp_LB6
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             _threadCheckStatusServer.Abort();
+        }
+
+        private void removeCurrentUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult mb = MessageBox.Show("Ви точно бажаєте видалити свого користувача?", "Question?",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (mb == DialogResult.Yes)
+            {
+                Functions.RemoveUserInfo(_userName);
+                this.Close();
+            }
         }
     }
 }

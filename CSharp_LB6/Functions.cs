@@ -25,13 +25,27 @@ namespace CSharp_LB6
             return userName;
         }
         
-        public static string GetUserName()
+        public static string GetUserName(List<string> usersName)
         {
             string userName;
             
             if (!File.Exists("data/username.json"))
             {
-                userName = GetUserNameFromDialog();
+                
+                while (true)
+                {
+                    string tempUserName = Functions.GetUserNameFromDialog();
+                    bool check = Functions.CheckNameRepeat(usersName, tempUserName);
+
+                    if (check)
+                        MessageBox.Show("Це ім'я вже використовується! Оберіть інше!", "Error!", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    else
+                    {
+                        userName = tempUserName;
+                        break;
+                    }
+                }
                 SerializeJson(userName, "username.json");
             }
             else
@@ -42,7 +56,7 @@ namespace CSharp_LB6
 
             return userName;
         }
-
+        
         private static void SerializeJson(string text, string fileName)
         {
             var saveJsonFile = JsonSerializer.Serialize(text);
@@ -168,7 +182,7 @@ namespace CSharp_LB6
             
             byte[] requestBuffer = Encoding.ASCII.GetBytes("send");
             stream.Write(requestBuffer, 0, requestBuffer.Length);
-            Thread.Sleep(50);
+            Thread.Sleep(1000);
             
             // Send the file name to the server
             string fileName = Path.GetFileName("data/" + userName + "UserData.xml");
@@ -289,6 +303,26 @@ namespace CSharp_LB6
                 result = true;
 
             return result;
+        }
+
+        internal static void RemoveUserInfo(string userName)
+        {
+            string fileName = userName + "UserData.xml";
+            
+            var client = new TcpClient(_serverIP, 1111);
+            var stream = client.GetStream();
+            
+            //send request to server
+            string request = "remove file";
+            byte[] requestBuffer = Encoding.ASCII.GetBytes(request);
+            stream.Write(requestBuffer, 0, requestBuffer.Length);
+            Thread.Sleep(1000);
+            
+            //send fileName to server
+            byte[] fileNameBuffer = Encoding.ASCII.GetBytes(fileName);
+            stream.Write(fileNameBuffer, 0, fileNameBuffer.Length);
+            
+            Directory.Delete("data", true);
         }
     }
 }

@@ -50,6 +50,7 @@
             this.buttonChangeFileStatus = new System.Windows.Forms.Button();
             this.buttonRemoveFile = new System.Windows.Forms.Button();
             this.labelServerStatus = new System.Windows.Forms.Label();
+            this.removeCurrentUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxMode.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBoxUsers.SuspendLayout();
@@ -210,7 +211,7 @@
             // 
             // файлToolStripMenuItem
             // 
-            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.changeUserNameToolStripMenuItem });
+            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.changeUserNameToolStripMenuItem, this.removeCurrentUserToolStripMenuItem });
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.файлToolStripMenuItem.Text = "Файл";
@@ -218,7 +219,7 @@
             // changeUserNameToolStripMenuItem
             // 
             this.changeUserNameToolStripMenuItem.Name = "changeUserNameToolStripMenuItem";
-            this.changeUserNameToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.changeUserNameToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
             this.changeUserNameToolStripMenuItem.Text = "Змінити ім\'я";
             this.changeUserNameToolStripMenuItem.Click += new System.EventHandler(this.changeUserNameToolStripMenuItem_Click);
             // 
@@ -254,6 +255,13 @@
             this.labelServerStatus.TabIndex = 7;
             this.labelServerStatus.Text = "Server status: unknown";
             // 
+            // removeCurrentUserToolStripMenuItem
+            // 
+            this.removeCurrentUserToolStripMenuItem.Name = "removeCurrentUserToolStripMenuItem";
+            this.removeCurrentUserToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.removeCurrentUserToolStripMenuItem.Text = "Видалити мого користувача";
+            this.removeCurrentUserToolStripMenuItem.Click += new System.EventHandler(this.removeCurrentUserToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
@@ -284,6 +292,8 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.ToolStripMenuItem removeCurrentUserToolStripMenuItem;
 
         private System.Windows.Forms.Label labelServerStatus;
 
