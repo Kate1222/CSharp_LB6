@@ -86,7 +86,7 @@ namespace CSharp_LB6
             return newFile;
         }
 
-        internal static void UpdateDataGridView(DataGridView dataGridView, List<UserFile> userFiles)
+        internal static void UpdatePersonalDataGridView(DataGridView dataGridView, List<UserFile> userFiles)
         {
             dataGridView.Rows.Clear();
             for (var i = 0; i < userFiles.Count; i++)
@@ -100,8 +100,21 @@ namespace CSharp_LB6
                     userFiles[i].path, userFiles[i].createDate, sighn);
             }
         }
+        
+        internal static void UpdateOtherDataGridView(DataGridView dataGridView, List<UserFile> userFiles)
+        {
+            dataGridView.Rows.Clear();
+            for (var i = 0; i < userFiles.Count; i++)
+            {
+                string sighn;
+                if (!userFiles[i].isAvailable) continue;
+                sighn = "+";
+                dataGridView.Rows.Add(i + 1, userFiles[i].name, userFiles[i].fileWeight / 1000000 + " мб.",
+                    userFiles[i].path, userFiles[i].createDate, sighn);
+            }
+        }
 
-        public static void SerializeXmlPersonalUserData(List<UserFile> userFiles, string userName)
+        public static void SerializeXmlUserData(List<UserFile> userFiles, string userName)
         {
             var xmlSerializer = new XmlSerializer(typeof(List<UserFile>));
 
@@ -109,7 +122,7 @@ namespace CSharp_LB6
                 xmlSerializer.Serialize(fs, userFiles);
         }
 
-        public static List<UserFile> DeserializeXmlPersonalUserData(string userName)
+        public static List<UserFile> DeserializeXmlUserData(string userName)
         {
             var xmlSerializer = new XmlSerializer(typeof(List<UserFile>));
             
@@ -192,7 +205,7 @@ namespace CSharp_LB6
             client.Close();
             
             //sendNew UserData file
-            SerializeXmlPersonalUserData(userFiles, userName);
+            SerializeXmlUserData(userFiles, userName);
             SendFileToServer(userName);
         }
 
@@ -220,6 +233,37 @@ namespace CSharp_LB6
             }
 
             return new List<string>();
+        }
+
+        internal static List<UserFile> GetUserXmlFile(string userName)
+        {
+            string fileName = userName + "UserData.xml";
+            
+            var client = new TcpClient(_serverIP, 1111);
+            var stream = client.GetStream();
+            
+            //send request to server
+            string request = "get";
+            byte[] requestBuffer = Encoding.ASCII.GetBytes(request);
+            stream.Write(requestBuffer, 0, requestBuffer.Length);
+            Thread.Sleep(1000);
+            
+            //send fileName to server
+            byte[] fileNameBuffer = Encoding.ASCII.GetBytes(fileName);
+            stream.Write(fileNameBuffer, 0, fileNameBuffer.Length);
+
+            // Receive the response from the server
+            byte[] responseBuffer = new byte[1024];
+            int responseBytesRead = stream.Read(responseBuffer, 0, responseBuffer.Length);
+            string response = Encoding.ASCII.GetString(responseBuffer, 0, responseBytesRead);
+
+            // Receive the file content from the server and save it to a file
+            if (response != "File not found")
+                SaveFile(response, fileName);
+            else
+                MessageBox.Show("Інформація про цього користувача відсутня!", "Error!", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            return DeserializeXmlUserData(userName);
         }
 
         private static void SaveFile(string fileContent, string fileName) 

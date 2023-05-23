@@ -10,6 +10,7 @@ namespace CSharp_LB6
     {
         //private static Functions _functions = new Functions();
         private static List<UserFile> _personalUserFiles;
+        private static List<UserFile> _otherUserFiles;
         private List<string> _otherUsersName;
         private string _serverStatus = "unknown";
         //private string _serverStatus = "Online";
@@ -52,10 +53,10 @@ namespace CSharp_LB6
             
             if (File.Exists("data/" + _userName + "UserData.xml"))
             {
-                _personalUserFiles = Functions.DeserializeXmlPersonalUserData(_userName);
+                _personalUserFiles = Functions.DeserializeXmlUserData(_userName);
                 if (_personalUserFiles.Count > 0)
                 {
-                    Functions.UpdateDataGridView(dataGridView1, _personalUserFiles);
+                    Functions.UpdatePersonalDataGridView(dataGridView1, _personalUserFiles);
                     buttonChangeFileStatus.Enabled = true;
                     buttonRemoveFile.Enabled = true;
                     buttonRemoveFile.Enabled = true;
@@ -73,11 +74,11 @@ namespace CSharp_LB6
             if (newFile.name != string.Empty)
             {
                 _personalUserFiles.Add(newFile);
-                Functions.UpdateDataGridView(dataGridView1, _personalUserFiles);
+                Functions.UpdatePersonalDataGridView(dataGridView1, _personalUserFiles);
                 buttonChangeFileStatus.Enabled = true;
                 buttonRemoveFile.Enabled = true;
                 
-                Functions.SerializeXmlPersonalUserData(_personalUserFiles, _userName);
+                Functions.SerializeXmlUserData(_personalUserFiles, _userName);
                 
                 ThreadStart sendDataFile = new ThreadStart(StartSendFileInfo);
                 Thread threadSendDataFile = new Thread(sendDataFile);
@@ -90,7 +91,7 @@ namespace CSharp_LB6
         {
             comboBoxUsers.Enabled = false;
             buttonSelectUser.Enabled = false;
-            Functions.UpdateDataGridView(dataGridView1, _personalUserFiles);
+            Functions.UpdatePersonalDataGridView(dataGridView1, _personalUserFiles);
         }
 
         private void radioButtonOtherFiles_CheckedChanged(object sender, EventArgs e)
@@ -119,8 +120,8 @@ namespace CSharp_LB6
 
         private void buttonSelectUser_Click(object sender, EventArgs e)
         {
-            /*var dialogAboutFile = new DialogAboutFile();
-            dialogAboutFile.ShowDialog();*/
+            _otherUserFiles = Functions.GetUserXmlFile(comboBoxUsers.Text);
+            Functions.UpdateOtherDataGridView(dataGridView1, _otherUserFiles);
         }
 
         private void changeUserNameToolStripMenuItem_Click(object sender, EventArgs e)
@@ -152,7 +153,7 @@ namespace CSharp_LB6
             if (_userName != _oldUserName)
             {
                 labelName.Text = "Вітаю, " + _userName;
-                Functions.SerializeXmlPersonalUserData(_personalUserFiles, _userName);
+                Functions.SerializeXmlUserData(_personalUserFiles, _userName);
                 ThreadStart startChangeFiles = new ThreadStart(StartChangeFiles);
                 Thread threadChangeFiles = new Thread(startChangeFiles);
                 threadChangeFiles.Start();
@@ -169,8 +170,8 @@ namespace CSharp_LB6
                 var dialogChangeAccessFile =
                     new DialogChangeAccessFile(_personalUserFiles, dataGridView1.CurrentCell.RowIndex);
                 dialogChangeAccessFile.ShowDialog();
-                Functions.UpdateDataGridView(dataGridView1, _personalUserFiles);
-                Functions.SerializeXmlPersonalUserData(_personalUserFiles, _userName);
+                Functions.UpdatePersonalDataGridView(dataGridView1, _personalUserFiles);
+                Functions.SerializeXmlUserData(_personalUserFiles, _userName);
                 
                 ThreadStart sendDataFile = new ThreadStart(StartSendFileInfo);
                 Thread threadSendDataFile = new Thread(sendDataFile);
@@ -189,13 +190,13 @@ namespace CSharp_LB6
                 if (mb == DialogResult.Yes)
                 {
                     _personalUserFiles.RemoveAt(dataGridView1.CurrentCell.RowIndex);
-                    Functions.UpdateDataGridView(dataGridView1, _personalUserFiles);
+                    Functions.UpdatePersonalDataGridView(dataGridView1, _personalUserFiles);
                     if (_personalUserFiles.Count == 0)
                     {
                         buttonRemoveFile.Enabled = false;
                         buttonChangeFileStatus.Enabled = false;
                     }
-                    Functions.SerializeXmlPersonalUserData(_personalUserFiles, _userName);
+                    Functions.SerializeXmlUserData(_personalUserFiles, _userName);
                     ThreadStart sendDataFile = new ThreadStart(StartSendFileInfo);
                     Thread threadSendDataFile = new Thread(sendDataFile);
                     threadSendDataFile.Start();
