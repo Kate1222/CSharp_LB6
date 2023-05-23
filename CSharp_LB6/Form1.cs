@@ -93,6 +93,12 @@ namespace CSharp_LB6
             comboBoxUsers.Enabled = false;
             buttonSelectUser.Enabled = false;
             Functions.UpdatePersonalDataGridView(dataGridView1, _personalUserFiles);
+            buttonAddFile.Enabled = true;
+            if (_personalUserFiles.Count != 0)
+            {
+                buttonChangeFileStatus.Enabled = true;
+                buttonRemoveFile.Enabled = true;
+            }
         }
 
         private void radioButtonOtherFiles_CheckedChanged(object sender, EventArgs e)

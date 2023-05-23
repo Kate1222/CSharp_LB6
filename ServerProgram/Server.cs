@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +14,7 @@ namespace ServerProgram
         private static readonly Functions _functions = new Functions();
         
         private static async Task Main() {
-            TcpListener listener = new TcpListener(IPAddress.Parse("192.168.31.99"), 1111);
+            TcpListener listener = new TcpListener(IPAddress.Parse("192.168.31.202"), 1111);
             listener.Start();
             Console.WriteLine("Server started on port 1111");
 

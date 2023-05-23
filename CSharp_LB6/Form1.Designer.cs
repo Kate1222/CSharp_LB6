@@ -47,10 +47,10 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeUserNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeCurrentUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonChangeFileStatus = new System.Windows.Forms.Button();
             this.buttonRemoveFile = new System.Windows.Forms.Button();
             this.labelServerStatus = new System.Windows.Forms.Label();
-            this.removeCurrentUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxMode.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBoxUsers.SuspendLayout();
@@ -223,6 +223,13 @@
             this.changeUserNameToolStripMenuItem.Text = "Змінити ім\'я";
             this.changeUserNameToolStripMenuItem.Click += new System.EventHandler(this.changeUserNameToolStripMenuItem_Click);
             // 
+            // removeCurrentUserToolStripMenuItem
+            // 
+            this.removeCurrentUserToolStripMenuItem.Name = "removeCurrentUserToolStripMenuItem";
+            this.removeCurrentUserToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.removeCurrentUserToolStripMenuItem.Text = "Видалити мого користувача";
+            this.removeCurrentUserToolStripMenuItem.Click += new System.EventHandler(this.removeCurrentUserToolStripMenuItem_Click);
+            // 
             // buttonChangeFileStatus
             // 
             this.buttonChangeFileStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -254,13 +261,6 @@
             this.labelServerStatus.Size = new System.Drawing.Size(157, 98);
             this.labelServerStatus.TabIndex = 7;
             this.labelServerStatus.Text = "Server status: unknown";
-            // 
-            // removeCurrentUserToolStripMenuItem
-            // 
-            this.removeCurrentUserToolStripMenuItem.Name = "removeCurrentUserToolStripMenuItem";
-            this.removeCurrentUserToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
-            this.removeCurrentUserToolStripMenuItem.Text = "Видалити мого користувача";
-            this.removeCurrentUserToolStripMenuItem.Click += new System.EventHandler(this.removeCurrentUserToolStripMenuItem_Click);
             // 
             // Form1
             // 

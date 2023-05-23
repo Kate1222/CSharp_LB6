@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
@@ -12,7 +11,7 @@ namespace CSharp_LB6
 {
     public class Functions
     {
-        private const string _serverIP = "192.168.31.99";
+        private const string _serverIP = "192.168.31.202";
 
         public static string GetUserNameFromDialog()
         {
@@ -118,14 +117,27 @@ namespace CSharp_LB6
         internal static void UpdateOtherDataGridView(DataGridView dataGridView, List<UserFile> userFiles)
         {
             dataGridView.Rows.Clear();
-            for (var i = 0; i < userFiles.Count; i++)
+            bool checkOutput = false;
+            if (userFiles.Count == 0)
+                MessageBox.Show("В цього користувача відсутня інформація про файли!", "Information!",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else
             {
-                string sighn;
-                if (!userFiles[i].isAvailable) continue;
-                sighn = "+";
-                dataGridView.Rows.Add(i + 1, userFiles[i].name, userFiles[i].fileWeight / 1000000 + " мб.",
-                    userFiles[i].path, userFiles[i].createDate, sighn);
+                int c = 1;
+                foreach (var info in userFiles)
+                {
+                    string sighn;
+                    if (!info.isAvailable) continue;
+                    checkOutput = true;
+                    sighn = "+";
+                    dataGridView.Rows.Add(c, info.name, info.fileWeight / 1000000 + " мб.",
+                        info.path, info.createDate, sighn);
+                    c++;
+                }
             }
+            if (!checkOutput && userFiles.Count > 0)
+                MessageBox.Show("В цього користувача відсутня інформація про файли!", "Information!",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public static void SerializeXmlUserData(List<UserFile> userFiles, string userName)
