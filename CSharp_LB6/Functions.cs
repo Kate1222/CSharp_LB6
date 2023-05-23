@@ -12,9 +12,9 @@ namespace CSharp_LB6
 {
     public class Functions
     {
-        private string serverIP = "192.168.31.99";
-        
-        public string GetUserNameFromDialog()
+        private const string _serverIP = "192.168.31.99";
+
+        public static string GetUserNameFromDialog()
         {
             var userNameDialog = new UserNameDialog();
             userNameDialog.ShowDialog();
@@ -25,18 +25,18 @@ namespace CSharp_LB6
             return userName;
         }
         
-        public string GetUserName()
+        public static string GetUserName()
         {
             string userName;
             
-            if (!File.Exists("username.json"))
+            if (!File.Exists("data/username.json"))
             {
                 userName = GetUserNameFromDialog();
                 SerializeJson(userName, "username.json");
             }
             else
             {
-                var readUserNameJsonFile = File.ReadAllText("username.json");
+                var readUserNameJsonFile = File.ReadAllText("data/username.json");
                 userName = JsonSerializer.Deserialize<string>(readUserNameJsonFile);
             }
 
@@ -48,15 +48,10 @@ namespace CSharp_LB6
             var saveJsonFile = JsonSerializer.Serialize(text);
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            File.WriteAllText(fileName, saveJsonFile);
+            File.WriteAllText("data/" + fileName, saveJsonFile);
         }
-        
-        /*private static string DesirializeJson()
-        {
-            
-        }*/
 
-        public UserFile SelectFile(bool openDialogAboutFile, List<UserFile> userFiles)
+        public static UserFile SelectFile(bool openDialogAboutFile, List<UserFile> userFiles)
         {
             var newFile = new UserFile();
             var openFileDialog = new OpenFileDialog();
@@ -91,7 +86,7 @@ namespace CSharp_LB6
             return newFile;
         }
 
-        internal void UpdateDataGridView(DataGridView dataGridView, List<UserFile> userFiles)
+        internal static void UpdateDataGridView(DataGridView dataGridView, List<UserFile> userFiles)
         {
             dataGridView.Rows.Clear();
             for (var i = 0; i < userFiles.Count; i++)
@@ -106,31 +101,42 @@ namespace CSharp_LB6
             }
         }
 
-        public void SerializeXml(List<UserFile> userFiles, string userName)
+        public static void SerializeXmlPersonalUserData(List<UserFile> userFiles, string userName)
         {
             var xmlSerializer = new XmlSerializer(typeof(List<UserFile>));
 
-            using (var fs = new FileStream(userName + "UserData.xml", FileMode.Create))
+            using (var fs = new FileStream("data/" + userName + "UserData.xml", FileMode.Create))
                 xmlSerializer.Serialize(fs, userFiles);
         }
 
-        public List<UserFile> DeserializeXml(string userName)
+        public static List<UserFile> DeserializeXmlPersonalUserData(string userName)
         {
             var xmlSerializer = new XmlSerializer(typeof(List<UserFile>));
             
-            using (var fs = new FileStream(userName + "UserData.xml", FileMode.Open))
+            using (var fs = new FileStream("data/" + userName + "UserData.xml", FileMode.Open))
             {
                 var deserializeUserFiles = (List<UserFile>)xmlSerializer.Deserialize(fs);
                 return deserializeUserFiles;
             }
         }
 
-        internal string LinkToServer()
+        public static List<string> DeserializeXmlUsersName()
+        {
+            var xmlSerializer = new XmlSerializer(typeof(List<string>));
+            
+            using (var fs = new FileStream("data/Users.xml", FileMode.Open))
+            {
+                var deserializeUsersName = (List<string>)xmlSerializer.Deserialize(fs);
+                return deserializeUsersName;
+            }
+        }
+
+        internal static string LinkToServer()
         {
             string result;
             try
             {
-                var client = new TcpClient(serverIP, 1111);
+                var client = new TcpClient(_serverIP, 1111);
                 result = "Online";
             }
             catch
@@ -141,9 +147,9 @@ namespace CSharp_LB6
             return result;
         }
 
-        internal void SendFileToServer(string value, string userName)
+        internal static void SendFileToServer(string userName)
         {
-            var client = new TcpClient(serverIP, 1111);
+            var client = new TcpClient(_serverIP, 1111);
 
             var stream = client.GetStream();
             
@@ -152,60 +158,93 @@ namespace CSharp_LB6
             Thread.Sleep(50);
             
             // Send the file name to the server
-            string fileName = Path.GetFileName(userName + "UserData.xml");
+            string fileName = Path.GetFileName("data/" + userName + "UserData.xml");
             byte[] fileNameBuffer = Encoding.ASCII.GetBytes(fileName);
             stream.Write(fileNameBuffer, 0, fileNameBuffer.Length);
             Thread.Sleep(1000);
             // Send the file content to the server
-            using (FileStream fileStream = File.OpenRead(userName + "UserData.xml")) {
+            using (FileStream fileStream = File.OpenRead("data/" + userName + "UserData.xml")) {
                 byte[] buffer = new byte[1024];
                 int bytesRead;
                 while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) > 0)
                     stream.Write(buffer, 0, bytesRead);
             }
 
-            // Send the file name to the server
-            /*var filePath = userName + "request.json";
-            var fileName = Path.GetFileName(filePath);
-            var fileNameBuffer = Encoding.ASCII.GetBytes(fileName);
-            Thread.Sleep(50);
-            stream.Write(fileNameBuffer, 0, fileNameBuffer.Length);
-
-            // Send the file content to the server
-            using (var fileStream = File.OpenRead(filePath)) {
-                var buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) > 0) {
-                    stream.Write(buffer, 0, bytesRead);
-                }
-            }*/
-
             client.Close();
         }
 
-        internal void SendFilesInfo(string userName)
+        internal static void ChangeFiles(string oldName, string userName, List<UserFile> userFiles)
         {
-            TcpClient client = new TcpClient(serverIP, 0001);
+            File.Delete("data/" + oldName + "UserData.xml");
+            
+            var client = new TcpClient(_serverIP, 1111);
+
+            var stream = client.GetStream();
+            
+            byte[] requestBuffer = Encoding.ASCII.GetBytes("remove file");
+            stream.Write(requestBuffer, 0, requestBuffer.Length);
+            Thread.Sleep(50);
+            
+            // Send the file name to the server
+            string fileName = oldName + "UserData.xml";
+            byte[] fileNameBuffer = Encoding.ASCII.GetBytes(fileName);
+            stream.Write(fileNameBuffer, 0, fileNameBuffer.Length);
+            client.Close();
+            
+            //sendNew UserData file
+            SerializeXmlPersonalUserData(userFiles, userName);
+            SendFileToServer(userName);
+        }
+
+        internal static List<string> GetOtherUsersName()
+        {
+            TcpClient client = new TcpClient(_serverIP, 1111);
 
             NetworkStream stream = client.GetStream();
+            
+            byte[] requestBuffer = Encoding.ASCII.GetBytes("give usernames");
+            stream.Write(requestBuffer, 0, requestBuffer.Length);
+            Thread.Sleep(1000);
+            
+            byte[] fileNameBuffer = new byte[1024];
+            int responseRead = stream.Read(fileNameBuffer, 0, fileNameBuffer.Length);
+            string responseText = Encoding.ASCII.GetString(fileNameBuffer, 0, responseRead);
+            if (responseText == "Users not found")
+                MessageBox.Show("Users not found!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                // Receive the file content from the server and save it to a file
+                SaveFile(responseText, "Users.xml");
 
-            // Send the file name to the server
-            string filePath = userName + "UserData.xml";
-            var fileName = Path.GetFileName(filePath);
-            var fileNameBuffer = Encoding.ASCII.GetBytes(fileName);
-            Thread.Sleep(2);
-            stream.Write(fileNameBuffer, 0, fileNameBuffer.Length);
-
-            // Send the file content to the server
-            using (var fileStream = File.OpenRead(filePath)) {
-                var buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) > 0) {
-                    stream.Write(buffer, 0, bytesRead);
-                }
+                return DeserializeXmlUsersName();
             }
 
-            client.Close();
+            return new List<string>();
+        }
+
+        private static void SaveFile(string fileContent, string fileName) 
+        {
+            string dataDirectory = Path.Combine(Directory.GetCurrentDirectory(), "data");
+
+            // Create the "data" directory if it doesn't exist
+            if (!Directory.Exists(dataDirectory)) 
+                Directory.CreateDirectory(dataDirectory);
+
+            // Save the file to the "data" directory
+            string filePath = Path.Combine(dataDirectory, fileName);
+            File.WriteAllText(filePath, fileContent);
+        }
+
+        internal static bool CheckNameRepeat(List<string> otherUsersName, string userName)
+        {
+            bool result = false;
+
+            var findUserName = otherUsersName.Find(un => un.Equals(userName));
+
+            if (findUserName != null)
+                result = true;
+
+            return result;
         }
     }
 }

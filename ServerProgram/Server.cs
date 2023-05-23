@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -76,11 +77,6 @@ namespace ServerProgram
                     {
                         if (File.Exists(filePath))
                         {
-                            // Send the file name to the client
-                            byte[] responseBuffer = Encoding.ASCII.GetBytes(fileName);
-                            await stream.WriteAsync(responseBuffer, 0, responseBuffer.Length);
-
-                            // Send the file content to the client
                             using (FileStream fileStream = File.OpenRead(filePath))
                             {
                                 byte[] buffer = new byte[1024];
@@ -100,35 +96,36 @@ namespace ServerProgram
 
                     break;
                 }
-                case "give files" when !Directory.Exists("data"):
+                case "give usernames":
                 {
-                    // Send an error response to the client
-                    await _functions.FunctionResponse(stream, "Files not found");
-                    Console.WriteLine("Files not found!");
-                    break;
-                }
-                case "give files":
-                {
-                    // Get the list of files in the "data" directory
-                    List<string> files = new List<string>(Directory.GetFiles(DataDirectory));
-                    
-                    if (files.Count == 0)
-                        await _functions.FunctionResponse(stream, "Files not found");
+                    if (!Directory.Exists("data"))
+                    {
+                        await _functions.FunctionResponse(stream, "Users not found");
+                        Console.WriteLine("Users not found!");
+                    }
                     else
                     {
-                        // Send the list of files to the client
-                        await _functions.FunctionResponse(stream, "List of files on the server:");
+                        // Get the list of files in the "data" directory
+                        List<string> files = new List<string>(Directory.GetFiles(DataDirectory));
 
-                        foreach (var file in files)
+                        if (files.Count == 0 || files[0] == "Users.xml")
+                            await _functions.FunctionResponse(stream, "Users not found");
+                        else
                         {
-                            Thread.Sleep(50);
-                            var fileName = Path.GetFileName(file);
-                            var fileNameBuffer = Encoding.ASCII.GetBytes(fileName);
-                            await stream.WriteAsync(fileNameBuffer, 0, fileNameBuffer.Length);
-                            Thread.Sleep(50);
-                        }
+                            // Send the list of files to the client
+                            List<string> usersName =
+                                (from file in files
+                                    select Path.GetFileName(file)
+                                    into fileName
+                                    where fileName != "Users.xml"
+                                    select fileName.Substring(0, fileName.Length - 12)).ToList();
+                            _functions.SerializeXml(usersName);
+                            Thread.Sleep(1000);
+                            _functions.SendFile(stream, "data/Users.xml");
+                            Thread.Sleep(1000);
 
-                        Console.WriteLine("List send successful!");
+                            Console.WriteLine("List send successful!");
+                        }
                     }
 
                     break;

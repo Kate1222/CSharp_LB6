@@ -8,49 +8,54 @@ namespace CSharp_LB6
 {
     public partial class Form1 : Form
     {
-        private static Functions _functions = new Functions();
-        private List<UserFile> personalUserFiles;
-        //private List<string> usersName;
-        private string serverStatus = "unknown";
-        //private string serverStatus = "Online";
-        private Thread threadCheckStatusServer;
-        private static string userName;
+        //private static Functions _functions = new Functions();
+        private static List<UserFile> _personalUserFiles;
+        private List<string> _otherUsersName;
+        private string _serverStatus = "unknown";
+        //private string _serverStatus = "Online";
+        private readonly Thread _threadCheckStatusServer;
+        private static string _userName;
+        private static string _oldUserName;
         
         private void StartLinkToServer()
         {
             while (true)
             {
-                serverStatus = _functions.LinkToServer();
-                labelServerStatus.Text = "Server status: " + serverStatus;
+                _serverStatus = Functions.LinkToServer();
+                labelServerStatus.Text = "Server status: " + _serverStatus;
                 Thread.Sleep(120000);
             }
         }
 
         private static void StartSendFileInfo()
         {
-            _functions.SendFileToServer("send", userName);
+            Functions.SendFileToServer(_userName);
             Thread.Sleep(2000);
-            //_functions.SendFilesInfo(userName);
+        }
+
+        private static void StartChangeFiles()
+        {
+            Functions.ChangeFiles(_oldUserName, _userName, _personalUserFiles);
         }
 
         public Form1()
         {
-            userName = _functions.GetUserName();
-            personalUserFiles = new List<UserFile>();
+            _userName = Functions.GetUserName();
+            _personalUserFiles = new List<UserFile>();
 
             InitializeComponent();
             comboBoxUsers.Enabled = false;
             buttonSelectUser.Enabled = false;
             
-            labelName.Text = "Вітаю, " + userName;
+            labelName.Text = "Вітаю, " + _userName;
             
             
-            if (File.Exists(userName + "UserData.xml"))
+            if (File.Exists("data/" + _userName + "UserData.xml"))
             {
-                personalUserFiles = _functions.DeserializeXml(userName);
-                if (personalUserFiles.Count > 0)
+                _personalUserFiles = Functions.DeserializeXmlPersonalUserData(_userName);
+                if (_personalUserFiles.Count > 0)
                 {
-                    _functions.UpdateDataGridView(dataGridView1, personalUserFiles);
+                    Functions.UpdateDataGridView(dataGridView1, _personalUserFiles);
                     buttonChangeFileStatus.Enabled = true;
                     buttonRemoveFile.Enabled = true;
                     buttonRemoveFile.Enabled = true;
@@ -58,22 +63,21 @@ namespace CSharp_LB6
             }
 
             ThreadStart threadStartLinkToServer = (StartLinkToServer);
-            threadCheckStatusServer = new Thread(threadStartLinkToServer);
-            threadCheckStatusServer.Start();
-            //_functions.SendFileToServer("send", userName);
+            _threadCheckStatusServer = new Thread(threadStartLinkToServer);
+            _threadCheckStatusServer.Start();
         }
 
         private void buttonAddFile_Click(object sender, EventArgs e)
         {
-            var newFile = _functions.SelectFile(true, personalUserFiles);
+            var newFile = Functions.SelectFile(true, _personalUserFiles);
             if (newFile.name != string.Empty)
             {
-                personalUserFiles.Add(newFile);
-                _functions.UpdateDataGridView(dataGridView1, personalUserFiles);
+                _personalUserFiles.Add(newFile);
+                Functions.UpdateDataGridView(dataGridView1, _personalUserFiles);
                 buttonChangeFileStatus.Enabled = true;
                 buttonRemoveFile.Enabled = true;
                 
-                _functions.SerializeXml(personalUserFiles, userName);
+                Functions.SerializeXmlPersonalUserData(_personalUserFiles, _userName);
                 
                 ThreadStart sendDataFile = new ThreadStart(StartSendFileInfo);
                 Thread threadSendDataFile = new Thread(sendDataFile);
@@ -86,12 +90,12 @@ namespace CSharp_LB6
         {
             comboBoxUsers.Enabled = false;
             buttonSelectUser.Enabled = false;
-            _functions.UpdateDataGridView(dataGridView1, personalUserFiles);
+            Functions.UpdateDataGridView(dataGridView1, _personalUserFiles);
         }
 
         private void radioButtonOtherFiles_CheckedChanged(object sender, EventArgs e)
         {
-            if (serverStatus == "Offline" || serverStatus == "unknown")
+            if (_serverStatus == "Offline" || _serverStatus == "unknown")
             {
                 MessageBox.Show("Зараз сервер недоступний!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 radioButtonClientFiles.Checked = true;
@@ -101,6 +105,15 @@ namespace CSharp_LB6
                 comboBoxUsers.Enabled = true;
                 buttonSelectUser.Enabled = true;
                 dataGridView1.Rows.Clear();
+                
+                _otherUsersName = Functions.GetOtherUsersName();
+                var findUserName = _otherUsersName.Find(un => un.Equals(_userName));
+                if (findUserName != null)
+                    _otherUsersName.Remove(_userName);
+                comboBoxUsers.DataSource = _otherUsersName;
+                buttonAddFile.Enabled = false;
+                buttonRemoveFile.Enabled = false;
+                buttonChangeFileStatus.Enabled = false;
             }
         }
 
@@ -112,32 +125,62 @@ namespace CSharp_LB6
 
         private void changeUserNameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            userName = _functions.GetUserNameFromDialog();
-            labelName.Text = "Вітаю, " + userName;
+            if (_otherUsersName == null)
+            {
+                _otherUsersName = Functions.GetOtherUsersName();
+                var findUserName = _otherUsersName.Find(un => un.Equals(_userName));
+                if (findUserName != null)
+                    _otherUsersName.Remove(_userName);
+            }
+
+            _oldUserName = _userName;
+            while (true)
+            {
+                string tempUserName = Functions.GetUserNameFromDialog();
+                bool check = Functions.CheckNameRepeat(_otherUsersName, tempUserName);
+
+                if (check)
+                    MessageBox.Show("Це ім'я вже використовується! Оберіть інше!", "Error!", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                else
+                {
+                    _userName = tempUserName;
+                    break;
+                }
+            }
+
+            if (_userName != _oldUserName)
+            {
+                labelName.Text = "Вітаю, " + _userName;
+                Functions.SerializeXmlPersonalUserData(_personalUserFiles, _userName);
+                ThreadStart startChangeFiles = new ThreadStart(StartChangeFiles);
+                Thread threadChangeFiles = new Thread(startChangeFiles);
+                threadChangeFiles.Start();
+                //StartChangeFiles();
+            }
         }
 
         private void buttonChangeFileStatus_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.CurrentCell.RowIndex == personalUserFiles.Count)
+            if (dataGridView1.CurrentCell.RowIndex == _personalUserFiles.Count)
                 MessageBox.Show("Неправильно обраний індекс!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
                 var dialogChangeAccessFile =
-                    new DialogChangeAccessFile(personalUserFiles, dataGridView1.CurrentCell.RowIndex);
+                    new DialogChangeAccessFile(_personalUserFiles, dataGridView1.CurrentCell.RowIndex);
                 dialogChangeAccessFile.ShowDialog();
-                _functions.UpdateDataGridView(dataGridView1, personalUserFiles);
-                _functions.SerializeXml(personalUserFiles, userName);
+                Functions.UpdateDataGridView(dataGridView1, _personalUserFiles);
+                Functions.SerializeXmlPersonalUserData(_personalUserFiles, _userName);
                 
                 ThreadStart sendDataFile = new ThreadStart(StartSendFileInfo);
                 Thread threadSendDataFile = new Thread(sendDataFile);
                 threadSendDataFile.Start();
-                //StartSendFileInfo();
             }
         }
 
         private void buttonRemoveFile_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.CurrentCell.RowIndex == personalUserFiles.Count)
+            if (dataGridView1.CurrentCell.RowIndex == _personalUserFiles.Count)
                 MessageBox.Show("Неправильно обраний індекс!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
@@ -145,25 +188,24 @@ namespace CSharp_LB6
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (mb == DialogResult.Yes)
                 {
-                    personalUserFiles.RemoveAt(dataGridView1.CurrentCell.RowIndex);
-                    _functions.UpdateDataGridView(dataGridView1, personalUserFiles);
-                    if (personalUserFiles.Count == 0)
+                    _personalUserFiles.RemoveAt(dataGridView1.CurrentCell.RowIndex);
+                    Functions.UpdateDataGridView(dataGridView1, _personalUserFiles);
+                    if (_personalUserFiles.Count == 0)
                     {
                         buttonRemoveFile.Enabled = false;
                         buttonChangeFileStatus.Enabled = false;
                     }
-                    _functions.SerializeXml(personalUserFiles, userName);
+                    Functions.SerializeXmlPersonalUserData(_personalUserFiles, _userName);
                     ThreadStart sendDataFile = new ThreadStart(StartSendFileInfo);
                     Thread threadSendDataFile = new Thread(sendDataFile);
                     threadSendDataFile.Start();
-                    //StartSendFileInfo();
                 }
             }
         }
         
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            threadCheckStatusServer.Abort();
+            _threadCheckStatusServer.Abort();
         }
     }
 }

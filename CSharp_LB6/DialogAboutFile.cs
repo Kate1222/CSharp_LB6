@@ -42,7 +42,7 @@ namespace CSharp_LB6
         private void buttonChooseAnother_Click(object sender, EventArgs e)
         {
             var functions = new Functions();
-            var newUserFile = functions.SelectFile(false, _userFiles);
+            var newUserFile = Functions.SelectFile(false, _userFiles);
             if (newUserFile.name != null)
             {
                 userFile = newUserFile;
